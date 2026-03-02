@@ -256,8 +256,9 @@ window.completeOnboard = async function() {
   if (!un || !bd) { errEl.textContent = 'Username and birthdate are required.'; return; }
   if (un.length < 3) { errEl.textContent = 'Username must be at least 3 characters.'; return; }
 
-  const unCheck = await getDocs(query(collection(db, 'users'), where('username', '==', un)));
-  if (!unCheck.empty) { errEl.textContent = 'Username taken. Try another.'; return; }
+ const unCheck = await getDocs(query(collection(db, 'users'), where('username', '==', un)));
+ const taken = unCheck.docs.some(d => d.id !== uid);
+  if (taken) { errEl.textContent = 'Username taken. Try another.'; return; }
 
   const uid = pendingGoogleUID || currentUser.uid;
   await createUserDoc(uid, {
