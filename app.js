@@ -46,14 +46,24 @@ let pendingGoogleUID = null;
 
 // ─── Badge definitions ───────────────────────────────────────
 const BADGES = {
-  veteran:  { label: 'Veteran',  icon: '🎖️',  cls: 'badge-veteran' },
-  pioneer:  { label: 'Pioneer',  icon: '🚀',  cls: 'badge-pioneer' },
-  creator:  { label: 'Creator',  icon: '✨',  cls: 'badge-creator' },
-  vip:      { label: 'VIP',      icon: '💎',  cls: 'badge-vip' },
-  staff:    { label: 'Staff',    icon: '🛡️',  cls: 'badge-staff' },
-  legend:   { label: 'Legend',   icon: '🏆',  cls: 'badge-legend' },
-  artist:   { label: 'Artist',   icon: '🎨',  cls: 'badge-artist' },
-  mod:      { label: 'Mod',      icon: '🔧',  cls: 'badge-mod' },
+  veteran:   { label: 'Veteran',    icon: '🎖️',  cls: 'badge-veteran' },
+  pioneer:   { label: 'Pioneer',    icon: '🚀',  cls: 'badge-pioneer' },
+  creator:   { label: 'Creator',    icon: '✨',  cls: 'badge-creator' },
+  vip:       { label: 'VIP',        icon: '💎',  cls: 'badge-vip' },
+  staff:     { label: 'Staff',      icon: '🛡️',  cls: 'badge-staff' },
+  legend:    { label: 'Legend',     icon: '🏆',  cls: 'badge-legend' },
+  artist:    { label: 'Artist',     icon: '🎨',  cls: 'badge-artist' },
+  mod:       { label: 'Mod',        icon: '🔧',  cls: 'badge-mod' },
+  tester:    { label: 'Tester',     icon: '🧪',  cls: 'badge-tester' },
+  founder:   { label: 'Founder',    icon: '👑',  cls: 'badge-founder' },
+  partner:   { label: 'Partner',    icon: '🤝',  cls: 'badge-partner' },
+  streamer:  { label: 'Streamer',   icon: '🎮',  cls: 'badge-streamer' },
+  developer: { label: 'Developer',  icon: '💻',  cls: 'badge-developer' },
+  supporter: { label: 'Supporter',  icon: '💙',  cls: 'badge-supporter' },
+  early:     { label: 'Early Bird', icon: '🐦',  cls: 'badge-early' },
+  vibes:     { label: 'Good Vibes', icon: '🌊',  cls: 'badge-vibes' },
+  famous:    { label: 'Famous',     icon: '⭐',  cls: 'badge-famous' },
+  trusted:   { label: 'Trusted',    icon: '✅',  cls: 'badge-trusted' },
 };
 
 // ─── Splash → Auth transition ────────────────────────────────
@@ -1295,7 +1305,15 @@ window.showAdmTab = function(tab, btn) {
     target.classList.add('active');
   }
   btn.classList.add('active');
-  const loaders = { users: loadAdmUsers, posts: loadAdmPosts, reports: loadAdmReports, badges: ()=>{}, announce: ()=>{}, settings: ()=>{}, overview: loadAdminOverview };
+  const loaders = {
+    users: loadAdmUsers,
+    posts: loadAdmPosts,
+    reports: loadAdmReports,
+    badges: () => {},
+    announce: () => {},
+    settings: () => {},
+    overview: loadAdminOverview
+  };
   if (loaders[tab]) loaders[tab]();
 };
 
