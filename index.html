@@ -1,1 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VIBE — Feel the Connection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
+<!-- ═══════════════════════════ SPLASH ═══════════════════════════ -->
+<div id="splash">
+  <div class="splash-core">
+    <div class="splash-rings">
+      <div class="ring ring1"></div>
+      <div class="ring ring2"></div>
+      <div class="ring ring3"></div>
+    </div>
+    <div class="splash-logo-wrap">
+      <svg class="splash-icon" width="56" height="56" viewBox="0 0 56 56">
+        <defs>
+          <linearGradient id="lg-main" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6EE7F7"/>
+            <stop offset="50%" stop-color="#A78BFA"/>
+            <stop offset="100%" stop-color="#F472B6"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+        </defs>
+        <circle cx="28" cy="28" r="26" stroke="url(#lg-main)" stroke-width="1.5" fill="none" opacity="0.4"/>
+        <path d="M14 20 C14 20 22 14 28 20 C34 26 42 20 42 20" stroke="url(#lg-main)" stroke-width="2.5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M14 28 C14 28 22 22 28 28 C34 34 42 28 42 28" stroke="url(#lg-main)" stroke-width="2.5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M14 36 C14 36 22 30 28 36 C34 42 42 36 42 36" stroke="url(#lg-main)" stroke-width="2.5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+      </svg>
+      <div class="splash-wordmark">VIBE</div>
+      <div class="splash-tagline">Feel the Connection</div>
+    </div>
+    <div class="splash-bar-wrap">
+      <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ AUTH ═══════════════════════════ -->
+<div id="auth-page" class="page hidden">
+  <div class="auth-noise"></div>
+  <div class="auth-orbs">
+    <div class="aorb aorb1"></div>
+    <div class="aorb aorb2"></div>
+    <div class="aorb aorb3"></div>
+  </div>
+
+  <div class="auth-layout">
+    <!-- Hero side -->
+    <div class="auth-hero">
+      <div class="hero-logo-mark">
+        <svg width="44" height="44" viewBox="0 0 56 56">
+          <defs><linearGradient id="hlg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6EE7F7"/><stop offset="50%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#F472B6"/></linearGradient></defs>
+          <circle cx="28" cy="28" r="26" stroke="url(#hlg)" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <path d="M14 20 C14 20 22 14 28 20 C34 26 42 20 42 20" stroke="url(#hlg)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M14 28 C14 28 22 22 28 28 C34 34 42 28 42 28" stroke="url(#hlg)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M14 36 C14 36 22 30 28 36 C34 42 42 36 42 36" stroke="url(#hlg)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>VIBE</span>
+      </div>
+      <h1 class="hero-headline">Your world,<br/><em>amplified.</em></h1>
+      <ul class="hero-list">
+        <li><span class="hl-dot"></span>Post, share & react in real-time</li>
+        <li><span class="hl-dot"></span>Direct messages & group chats</li>
+        <li><span class="hl-dot"></span>Earn badges & build your rank</li>
+        <li><span class="hl-dot"></span>Verified profiles & communities</li>
+        <li><span class="hl-dot"></span>Discover trending content</li>
+      </ul>
+    </div>
+
+    <!-- Auth card -->
+    <div class="auth-card">
+      <div class="auth-tab-row">
+        <button class="atab active" id="tab-in" onclick="authTab('in')">Sign In</button>
+        <button class="atab" id="tab-up" onclick="authTab('up')">Join VIBE</button>
+      </div>
+
+      <!-- SIGN IN -->
+      <div id="form-in" class="auth-form">
+        <button class="btn-google" onclick="googleAuth()">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
+          Continue with Google
+        </button>
+        <div class="divider-line"><span>or</span></div>
+        <input class="vib-input" type="email" id="li-email" placeholder="Email address" />
+        <input class="vib-input" type="password" id="li-pass" placeholder="Password" />
+        <p id="li-err" class="form-err"></p>
+        <button class="btn-primary w-full" onclick="emailLogin()">Sign In →</button>
+      </div>
+
+      <!-- SIGN UP -->
+      <div id="form-up" class="auth-form hidden">
+        <button class="btn-google" onclick="googleAuth()">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
+          Sign up with Google
+        </button>
+        <div class="divider-line"><span>or</span></div>
+        <div class="two-col">
+          <input class="vib-input" type="text" id="su-fn" placeholder="First name *" />
+          <input class="vib-input" type="text" id="su-ln" placeholder="Last name *" />
+        </div>
+        <input class="vib-input" type="text" id="su-un" placeholder="@username *" />
+        <input class="vib-input" type="email" id="su-em" placeholder="Email address *" />
+        <input class="vib-input" type="password" id="su-pw" placeholder="Password (8+ chars) *" />
+        <div class="two-col">
+          <div class="date-field">
+            <label class="date-label">Birthdate *</label>
+            <input class="vib-input" type="date" id="su-bd" />
+          </div>
+          <select class="vib-input vib-select" id="su-gd">
+            <option value="">Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="nonbinary">Non-binary</option>
+            <option value="other">Other</option>
+            <option value="prefer_not">Prefer not to say</option>
+          </select>
+        </div>
+        <input class="vib-input" type="text" id="su-bio" placeholder="Short bio (optional)" />
+        <p id="su-err" class="form-err"></p>
+        <p class="terms-note">By joining you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a>.</p>
+        <button class="btn-primary w-full" onclick="emailSignup()">Create Account →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ONBOARDING (Google new users) ═══════════════════════════ -->
+<div id="onboard-page" class="page hidden">
+  <div class="auth-noise"></div>
+  <div class="auth-orbs"><div class="aorb aorb1"></div><div class="aorb aorb2"></div></div>
+  <div class="onboard-center">
+    <div class="auth-card" style="max-width:460px">
+      <div class="ob-head">
+        <div style="font-size:2.5rem">🎉</div>
+        <h2>Almost there!</h2>
+        <p>Complete your VIBE profile</p>
+      </div>
+      <input class="vib-input" type="text" id="ob-un" placeholder="@username *" />
+      <div class="two-col">
+        <div class="date-field">
+          <label class="date-label">Birthdate *</label>
+          <input class="vib-input" type="date" id="ob-bd" />
+        </div>
+        <select class="vib-input vib-select" id="ob-gd">
+          <option value="">Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="nonbinary">Non-binary</option>
+          <option value="other">Other</option>
+          <option value="prefer_not">Prefer not to say</option>
+        </select>
+      </div>
+      <input class="vib-input" type="text" id="ob-bio" placeholder="Short bio (optional)" />
+      <p id="ob-err" class="form-err"></p>
+      <button class="btn-primary w-full" onclick="completeOnboard()">Enter VIBE →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ BAN PAGE ═══════════════════════════ -->
+<div id="ban-page" class="page hidden">
+  <div class="ban-screen">
+    <div class="ban-glow"></div>
+    <div class="ban-content">
+      <div class="ban-icon">🔨</div>
+      <h2>Account Suspended</h2>
+      <p id="ban-reason">Your account has been suspended.</p>
+      <p id="ban-date" class="ban-date"></p>
+      <p class="ban-appeal">Appeal at <a href="mailto:support@vibe.social">support@vibe.social</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ MAIN APP ═══════════════════════════ -->
+<div id="app-page" class="page hidden">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="tb-left">
+      <button class="tb-brand" onclick="goHome()">
+        <svg width="24" height="24" viewBox="0 0 56 56">
+          <defs><linearGradient id="tlg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6EE7F7"/><stop offset="50%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#F472B6"/></linearGradient></defs>
+          <path d="M14 20 C14 20 22 14 28 20 C34 26 42 20 42 20" stroke="url(#tlg)" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M14 28 C14 28 22 22 28 28 C34 34 42 28 42 28" stroke="url(#tlg)" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M14 36 C14 36 22 30 28 36 C34 42 42 36 42 36" stroke="url(#tlg)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+        VIBE
+      </button>
+      <div class="tb-search">
+        <input type="text" id="search-inp" placeholder="Search VIBE…" autocomplete="off" oninput="runSearch(this.value)" onblur="setTimeout(()=>closeSearch(),200)" />
+        <span class="search-ico">⌕</span>
+        <div class="search-drop" id="search-drop"></div>
+      </div>
+    </div>
+
+    <nav class="tb-nav">
+      <button class="tbn active" id="tbn-home" onclick="goHome();setTbn('home')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="tbn" id="tbn-explore" onclick="goExplore();setTbn('explore')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Explore</span>
+      </button>
+      <button class="tbn" id="tbn-msg" onclick="openPanel('messages');setTbn('msg')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span>Messages</span>
+        <div class="tbn-dot hidden" id="msg-dot"></div>
+      </button>
+      <button class="tbn" id="tbn-notif" onclick="openPanel('notifications');setTbn('notif')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span>Alerts</span>
+        <div class="tbn-dot hidden" id="notif-dot"></div>
+      </button>
+    </nav>
+
+    <div class="tb-right">
+      <div class="tb-avatar-btn" id="tb-av-btn" onclick="toggleUserMenu(event)">
+        <div class="tb-av" id="tb-av">?</div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="user-menu hidden" id="user-menu">
+        <div class="um-header">
+          <div class="um-av" id="um-av"></div>
+          <div>
+            <div class="um-name" id="um-name">—</div>
+            <div class="um-handle" id="um-handle">—</div>
+          </div>
+        </div>
+        <div class="um-sep"></div>
+        <button onclick="showMyProfile();closeUserMenu()">👤 My Profile</button>
+        <button onclick="openPanel('settings');closeUserMenu()">⚙️ Settings</button>
+        <button id="um-admin-btn" class="hidden" onclick="enterAdmin();closeUserMenu()">🛡️ Admin Panel</button>
+        <div class="um-sep"></div>
+        <button onclick="doLogout()" class="logout-btn">🚪 Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- APP LAYOUT -->
+  <div class="app-layout">
+
+    <!-- LEFT RAIL -->
+    <aside class="left-rail">
+      <button class="rail-btn active" id="rl-home" onclick="goHome();setRail('home')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Home
+      </button>
+      <button class="rail-btn" id="rl-explore" onclick="goExplore();setRail('explore')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Explore
+      </button>
+      <button class="rail-btn" id="rl-profile" onclick="showMyProfile();setRail('profile')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </button>
+      <button class="rail-btn" id="rl-msg" onclick="openPanel('messages');setRail('msg')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Messages
+      </button>
+      <button class="rail-btn" id="rl-notif" onclick="openPanel('notifications');setRail('notif')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        Notifications
+      </button>
+      <div class="rail-div"></div>
+      <button class="rail-btn sm" onclick="filterFeed('trending')">🔥 Trending</button>
+      <button class="rail-btn sm" onclick="filterFeed('following')">👥 Following</button>
+      <button class="rail-btn sm" onclick="filterFeed('media')">🖼️ Media</button>
+      <button class="btn-new-post" onclick="openPostModal()">
+        <span style="font-size:1.1rem;line-height:1">+</span> New Post
+      </button>
+    </aside>
+
+    <!-- MAIN FEED -->
+    <main class="main-feed" id="main-feed">
+      <!-- Composer bar -->
+      <div class="composer-bar" id="comp-bar">
+        <div class="comp-av" id="comp-av">?</div>
+        <button class="comp-fake" onclick="openPostModal()">
+          What's on your mind, <b id="comp-name">there</b>?
+        </button>
+        <div class="comp-actions">
+          <button onclick="openPostModal('photo')">📷</button>
+          <button onclick="openPostModal('feeling')">😊</button>
+          <button onclick="openPostModal('poll')">📊</button>
+        </div>
+      </div>
+
+      <!-- Feed header -->
+      <div class="feed-header" id="feed-header">
+        <span class="feed-title" id="feed-title">✦ Home Feed</span>
+        <div class="feed-tabs">
+          <button class="feed-tab active" onclick="setFeedTab('foryou',this)">For You</button>
+          <button class="feed-tab" onclick="setFeedTab('latest',this)">Latest</button>
+        </div>
+      </div>
+
+      <div id="posts-area"></div>
+      <div id="load-more-wrap" class="hidden" style="text-align:center;padding:1.5rem 0">
+        <button class="btn-secondary" onclick="loadMorePosts()">Load more posts</button>
+      </div>
+    </main>
+
+    <!-- RIGHT RAIL -->
+    <aside class="right-rail">
+      <div class="widget">
+        <div class="wgt-hdr">🔥 Trending</div>
+        <div id="w-trending"></div>
+      </div>
+      <div class="widget" style="margin-top:1rem">
+        <div class="wgt-hdr">👥 Who to Follow</div>
+        <div id="w-suggest"></div>
+      </div>
+      <div class="widget" style="margin-top:1rem">
+        <div class="wgt-hdr">🟢 Online Now</div>
+        <div id="w-online"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===== PANELS ===== -->
+
+  <!-- MESSAGES PANEL -->
+  <div class="slide-panel" id="panel-messages">
+    <div class="sp-header">
+      <span>💬 Messages</span>
+      <button class="sp-close" onclick="closePanel('messages')">✕</button>
+    </div>
+    <div class="sp-body">
+      <input type="text" class="vib-input sm" placeholder="Search conversations…" oninput="searchConvos(this.value)" />
+      <div id="dm-list" style="margin-top:0.8rem"></div>
+    </div>
+    <!-- Chat window inside panel -->
+    <div id="chat-win" class="chat-win hidden">
+      <div class="cw-header">
+        <button class="cw-back" onclick="closeChatWin()">←</button>
+        <div class="cw-userinfo">
+          <div class="cw-av" id="cw-av"></div>
+          <div>
+            <div class="cw-name" id="cw-name"></div>
+            <div class="cw-status" id="cw-status"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cw-msgs" id="cw-msgs"></div>
+      <div class="cw-input-row">
+        <input type="text" id="cw-inp" class="vib-input sm" placeholder="Message…" onkeydown="if(event.key==='Enter')sendDM()" />
+        <button class="btn-send" onclick="sendDM()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS PANEL -->
+  <div class="slide-panel" id="panel-notifications">
+    <div class="sp-header">
+      <span>🔔 Notifications</span>
+      <button class="sp-close" onclick="closePanel('notifications');markNotifsRead()">✕</button>
+    </div>
+    <div class="sp-body" id="notif-list"></div>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div class="slide-panel" id="panel-settings">
+    <div class="sp-header">
+      <span>⚙️ Settings</span>
+      <button class="sp-close" onclick="closePanel('settings')">✕</button>
+    </div>
+    <div class="sp-body">
+      <div class="settings-group">
+        <div class="sg-title">Edit Profile</div>
+        <label class="sg-label">Display Name</label>
+        <input class="vib-input" type="text" id="set-dn" />
+        <label class="sg-label">Bio</label>
+        <textarea class="vib-input" id="set-bio" rows="3" placeholder="Tell the world about you…"></textarea>
+        <label class="sg-label">Location</label>
+        <input class="vib-input" type="text" id="set-loc" placeholder="City, Country" />
+        <label class="sg-label">Website</label>
+        <input class="vib-input" type="url" id="set-web" placeholder="https://…" />
+        <label class="sg-label">Avatar URL</label>
+        <input class="vib-input" type="url" id="set-av" placeholder="Paste image URL…" />
+        <label class="sg-label">Banner URL</label>
+        <input class="vib-input" type="url" id="set-bn" placeholder="Paste banner URL…" />
+        <button class="btn-primary w-full" onclick="saveSettings()" style="margin-top:0.5rem">Save Changes</button>
+      </div>
+      <div class="sg-divider"></div>
+      <div class="settings-group">
+        <div class="sg-title">Security</div>
+        <label class="sg-label">New Password</label>
+        <input class="vib-input" type="password" id="set-pw" placeholder="Leave blank to keep current" />
+        <button class="btn-secondary w-full" onclick="changePassword()">Update Password</button>
+      </div>
+      <div class="sg-divider"></div>
+      <div class="settings-group">
+        <div class="sg-title" style="color:var(--red)">Danger Zone</div>
+        <button class="btn-danger w-full" onclick="deactivateAccount()">Deactivate Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE PANEL -->
+  <div class="slide-panel panel-wide" id="panel-profile">
+    <div class="sp-header">
+      <button class="sp-back" onclick="closePanel('profile')">← Back</button>
+      <span id="pp-title">Profile</span>
+      <span style="width:60px"></span>
+    </div>
+    <div class="sp-body no-pad" id="pp-body"></div>
+  </div>
+
+  <!-- BACKDROP -->
+  <div class="panel-backdrop hidden" id="backdrop" onclick="closeAllPanels()"></div>
+
+  <!-- POST COMPOSE MODAL -->
+  <div class="modal-bg hidden" id="post-modal">
+    <div class="post-modal">
+      <div class="modal-header">
+        <span>Create Post</span>
+        <button onclick="closePostModal()">✕</button>
+      </div>
+      <div class="post-compose">
+        <div class="post-user-row">
+          <div class="post-compose-av" id="post-compose-av"></div>
+          <div>
+            <div class="post-compose-name" id="post-compose-name"></div>
+            <select class="audience-sel" id="post-audience">
+              <option value="public">🌍 Public</option>
+              <option value="followers">👥 Followers only</option>
+            </select>
+          </div>
+        </div>
+        <textarea id="post-text" class="post-ta" placeholder="What's on your mind?" maxlength="500" oninput="updateCharCount()"></textarea>
+        <div id="post-img-prev"></div>
+        <div id="post-feeling-tag"></div>
+        <div id="poll-build" class="hidden">
+          <input type="text" id="poll-o1" class="vib-input sm" placeholder="Option 1" style="margin-bottom:0.4rem" />
+          <input type="text" id="poll-o2" class="vib-input sm" placeholder="Option 2" style="margin-bottom:0.4rem" />
+          <input type="text" id="poll-o3" class="vib-input sm" placeholder="Option 3 (optional)" />
+        </div>
+        <div class="compose-bar">
+          <div class="compose-tools">
+            <label class="ctool" title="Photo">📷<input type="file" accept="image/*" style="display:none" onchange="previewPostImg(this)" /></label>
+            <button class="ctool" onclick="toggleFeelings()" title="Feeling">😊</button>
+            <button class="ctool" onclick="togglePoll()" title="Poll">📊</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.7rem">
+            <span class="char-count" id="char-count">0 / 500</span>
+            <button class="btn-primary sm" id="post-submit-btn" onclick="submitPost()">Post</button>
+          </div>
+        </div>
+        <div class="feeling-grid hidden" id="feeling-grid">
+          <button onclick="pickFeeling('😊 Happy')">😊 Happy</button>
+          <button onclick="pickFeeling('🎉 Excited')">🎉 Excited</button>
+          <button onclick="pickFeeling('😎 Cool')">😎 Cool</button>
+          <button onclick="pickFeeling('🥰 Loved')">🥰 Loved</button>
+          <button onclick="pickFeeling('😂 Amused')">😂 Amused</button>
+          <button onclick="pickFeeling('🙏 Grateful')">🙏 Grateful</button>
+          <button onclick="pickFeeling('💪 Motivated')">💪 Motivated</button>
+          <button onclick="pickFeeling('😔 Sad')">😔 Sad</button>
+          <button onclick="pickFeeling('😤 Frustrated')">😤 Frustrated</button>
+          <button onclick="pickFeeling('🤔 Curious')">🤔 Curious</button>
+          <button onclick="pickFeeling('😴 Tired')">😴 Tired</button>
+          <button onclick="pickFeeling('🍕 Hungry')">🍕 Hungry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POST DETAIL MODAL -->
+  <div class="modal-bg hidden" id="detail-modal">
+    <div class="detail-modal">
+      <div class="modal-header">
+        <span>Post</span>
+        <button onclick="closeDetailModal()">✕</button>
+      </div>
+      <div id="detail-body"></div>
+    </div>
+  </div>
+
+  <!-- WARN MODAL -->
+  <div class="modal-bg hidden" id="warn-modal">
+    <div class="warn-modal">
+      <div class="warn-emoji">⚠️</div>
+      <h3>You've received a warning</h3>
+      <div class="warn-reason-box" id="warn-reason"></div>
+      <div class="warn-count-row" id="warn-count"></div>
+      <button class="btn-primary w-full" onclick="acknowledgeWarn()">I Understand</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</div>
+
+<!-- ═══════════════════════════ ADMIN PAGE ═══════════════════════════ -->
+<div id="admin-page" class="page hidden">
+  <header class="topbar admin-topbar">
+    <div class="tb-left">
+      <button class="tb-brand" onclick="exitAdmin()">
+        <svg width="22" height="22" viewBox="0 0 56 56"><defs><linearGradient id="alg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6EE7F7"/><stop offset="100%" stop-color="#F472B6"/></linearGradient></defs><path d="M14 20 C14 20 22 14 28 20 C34 26 42 20 42 20" stroke="url(#alg)" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M14 28 C14 28 22 22 28 28 C34 34 42 28 42 28" stroke="url(#alg)" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M14 36 C14 36 22 30 28 36 C34 42 42 36 42 36" stroke="url(#alg)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        VIBE
+      </button>
+      <div class="admin-chip">ADMIN PANEL</div>
+    </div>
+    <div class="tb-right">
+      <button class="btn-secondary sm" onclick="exitAdmin()">← Exit Admin</button>
+    </div>
+  </header>
+  <div class="admin-layout">
+    <aside class="admin-rail">
+      <button class="adm-btn active" onclick="showAdmTab('overview',this)">📊 Overview</button>
+      <button class="adm-btn" onclick="showAdmTab('users',this)">👥 Users</button>
+      <button class="adm-btn" onclick="showAdmTab('posts',this)">📝 Posts</button>
+      <button class="adm-btn" onclick="showAdmTab('reports',this)">🚩 Reports</button>
+      <button class="adm-btn" onclick="showAdmTab('badges',this)">🏅 Badges</button>
+      <button class="adm-btn" onclick="showAdmTab('announce',this)">📢 Announce</button>
+      <button class="adm-btn" onclick="showAdmTab('settings',this)">⚙️ Settings</button>
+    </aside>
+    <div class="admin-content">
+
+      <!-- OVERVIEW -->
+      <div class="adm-tab active" id="adm-overview">
+        <h2 class="adm-h2">📊 Overview</h2>
+        <div class="adm-stats-grid">
+          <div class="adm-stat"><div class="adm-stat-val" id="as-users">—</div><div class="adm-stat-lbl">Total Users</div></div>
+          <div class="adm-stat"><div class="adm-stat-val" id="as-posts">—</div><div class="adm-stat-lbl">Total Posts</div></div>
+          <div class="adm-stat"><div class="adm-stat-val" id="as-reports">—</div><div class="adm-stat-lbl">Open Reports</div></div>
+          <div class="adm-stat"><div class="adm-stat-val" id="as-verified">—</div><div class="adm-stat-lbl">Verified</div></div>
+        </div>
+        <h3 class="adm-h3">Recent Posts</h3>
+        <div id="adm-recent"></div>
+      </div>
+
+      <!-- USERS -->
+      <div class="adm-tab hidden" id="adm-users">
+        <h2 class="adm-h2">👥 Users</h2>
+        <input type="text" class="vib-input" placeholder="Search users…" style="max-width:380px;margin-bottom:1rem" oninput="admSearchUsers(this.value)" />
+        <div id="adm-user-list"></div>
+      </div>
+
+      <!-- POSTS -->
+      <div class="adm-tab hidden" id="adm-posts">
+        <h2 class="adm-h2">📝 All Posts</h2>
+        <div id="adm-post-list"></div>
+      </div>
+
+      <!-- REPORTS -->
+      <div class="adm-tab hidden" id="adm-reports">
+        <h2 class="adm-h2">🚩 Reports</h2>
+        <div id="adm-report-list"></div>
+      </div>
+
+      <!-- BADGES -->
+      <div class="adm-tab hidden" id="adm-badges">
+        <h2 class="adm-h2">🏅 Badge Manager</h2>
+        <p style="color:var(--muted);margin-bottom:1rem;font-size:0.9rem">Award or revoke badges from users.</p>
+        <input type="text" class="vib-input" placeholder="Search user to badge…" style="max-width:380px;margin-bottom:1rem" oninput="admBadgeSearch(this.value)" />
+        <div id="adm-badge-results"></div>
+        <div id="adm-badge-editor" class="hidden"></div>
+      </div>
+
+      <!-- ANNOUNCE -->
+      <div class="adm-tab hidden" id="adm-announce">
+        <h2 class="adm-h2">📢 Announcements</h2>
+        <p style="color:var(--muted);margin-bottom:1rem;font-size:0.9rem">Post a system-wide announcement to all users.</p>
+        <textarea class="vib-input" id="adm-ann" rows="5" placeholder="Write your announcement…"></textarea>
+        <div style="display:flex;gap:0.8rem;margin-top:0.8rem;flex-wrap:wrap">
+          <button class="btn-primary" onclick="sendAnnouncement('normal')">📢 Send</button>
+          <button class="btn-secondary" onclick="sendAnnouncement('pinned')">📌 Send Pinned</button>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="adm-tab hidden" id="adm-settings">
+        <h2 class="adm-h2">⚙️ Platform Settings</h2>
+        <div class="adm-row"><label>Allow new signups</label><select class="vib-input sm" id="adm-signups"><option value="yes">Yes</option><option value="no">No</option></select></div>
+        <div class="adm-row"><label>Max post length (chars)</label><input type="number" class="vib-input sm" id="adm-postlen" value="500" /></div>
+        <div class="adm-row"><label>Maintenance mode</label><select class="vib-input sm" id="adm-maintenance"><option value="no">Off</option><option value="yes">On</option></select></div>
+        <button class="btn-primary" onclick="saveAdmSettings()" style="margin-top:0.5rem">Save Settings</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
