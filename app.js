@@ -64,6 +64,7 @@ const BADGES = {
   vibes:     { label: 'Good Vibes', icon: '🌊',  cls: 'badge-vibes' },
   famous:    { label: 'Famous',     icon: '⭐',  cls: 'badge-famous' },
   trusted:   { label: 'Trusted',    icon: '✅',  cls: 'badge-trusted' },
+  Admin:     { label: 'Admin',    icon: '🔱',  cls: 'badge-Admin' },
 };
 
 // ─── Splash → Auth transition ────────────────────────────────
