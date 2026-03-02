@@ -34,7 +34,7 @@ const googleProvider = new GoogleAuthProvider();
 
 // ─── App State ───────────────────────────────────────────────
 let currentUser = null;
-let currentProfile = null; // Firestore user doc
+let currentProfile = null;
 let currentFeedTab = 'foryou';
 let feedFilter = null;
 let lastPostDoc = null;
@@ -72,7 +72,6 @@ onAuthStateChanged(auth, async (user) => {
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {
-    // Brand new Google user — needs onboarding
     pendingGoogleUID = user.uid;
     showPage('onboard-page');
     return;
@@ -81,7 +80,6 @@ onAuthStateChanged(auth, async (user) => {
   const data = snap.data();
   currentProfile = data;
 
-  // Check ban
   if (data.banned) {
     document.getElementById('ban-reason').textContent = data.banReason || 'Your account has been suspended.';
     document.getElementById('ban-date').textContent = data.bannedAt
@@ -91,17 +89,13 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // If profile incomplete (Google user missing username)
   if (!data.username) {
     pendingGoogleUID = user.uid;
     showPage('onboard-page');
     return;
   }
 
-  // All good — load app
   loadApp(data);
-
-  // Check for unacknowledged warnings after 2s
   setTimeout(() => checkWarnings(user.uid), 2000);
 });
 
@@ -110,7 +104,6 @@ function loadApp(profile) {
   showPage('app-page');
   currentProfile = profile;
 
-  // Update UI elements
   const displayName = profile.displayName || profile.fullName || 'User';
   const handle = profile.username ? '@' + profile.username : '';
 
@@ -131,7 +124,6 @@ function loadApp(profile) {
   subscribeNotifs();
   updatePresence(currentUser.uid, true);
 
-  // Prefill settings
   document.getElementById('set-dn').value = displayName;
   document.getElementById('set-bio').value = profile.bio || '';
   document.getElementById('set-loc').value = profile.location || '';
@@ -230,7 +222,6 @@ window.emailSignup = async function() {
   if (pw.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; return; }
   if (un.length < 3) { errEl.textContent = 'Username must be at least 3 characters.'; return; }
 
-  // Check username uniqueness
   const unCheck = await getDocs(query(collection(db, 'users'), where('username', '==', un)));
   if (!unCheck.empty) { errEl.textContent = 'Username already taken.'; return; }
 
@@ -256,11 +247,12 @@ window.completeOnboard = async function() {
   if (!un || !bd) { errEl.textContent = 'Username and birthdate are required.'; return; }
   if (un.length < 3) { errEl.textContent = 'Username must be at least 3 characters.'; return; }
 
- const unCheck = await getDocs(query(collection(db, 'users'), where('username', '==', un)));
- const taken = unCheck.docs.some(d => d.id !== uid);
+  const uid = pendingGoogleUID || currentUser.uid;
+
+  const unCheck = await getDocs(query(collection(db, 'users'), where('username', '==', un)));
+  const taken = unCheck.docs.some(d => d.id !== uid);
   if (taken) { errEl.textContent = 'Username taken. Try another.'; return; }
 
-  const uid = pendingGoogleUID || currentUser.uid;
   await createUserDoc(uid, {
     fullName: currentUser.displayName || un,
     username: un, email: currentUser.email,
@@ -334,7 +326,6 @@ window.addEventListener('beforeunload', () => {
 
 window.goHome = function() {
   feedFilter = null;
-  document.getElementById('feed-hdr-title') && (document.getElementById('feed-hdr-title').textContent = '✦ Home Feed');
   const titleEl = document.getElementById('feed-title');
   if (titleEl) titleEl.textContent = '✦ Home Feed';
   loadFeed();
@@ -382,11 +373,20 @@ async function loadFeed() {
     const snaps = await getDocs(q);
     area.innerHTML = '';
 
-    // Pinned announcements first
-    const annSnap = await getDocs(query(collection(db, 'announcements'), where('pinned','==',true), orderBy('createdAt','desc'), limit(3)));
-    annSnap.forEach(d => {
-      area.insertAdjacentHTML('beforeend', renderAnnouncement(d.id, d.data()));
-    });
+    // ✅ FIX: Wrapped announcements in try/catch so it won't crash the feed
+    try {
+      const annSnap = await getDocs(query(
+        collection(db, 'announcements'),
+        where('pinned','==',true),
+        orderBy('createdAt','desc'),
+        limit(3)
+      ));
+      annSnap.forEach(d => {
+        area.insertAdjacentHTML('beforeend', renderAnnouncement(d.id, d.data()));
+      });
+    } catch (_) {
+      // Announcements index may not exist yet — silently skip
+    }
 
     if (snaps.empty) {
       area.innerHTML += '<div style="text-align:center;padding:3rem;color:var(--muted)">No posts yet. Be the first to post! 🎉</div>';
@@ -579,7 +579,6 @@ window.submitComment = async function(postId) {
   if (el) el.dataset.loaded = '';
   await loadComments(postId);
 
-  // Notify post author
   const postSnap = await getDoc(doc(db, 'posts', postId));
   if (postSnap.exists() && postSnap.data().uid !== currentUser.uid) {
     sendNotification(postSnap.data().uid, 'comment', currentProfile?.displayName || 'Someone', postId);
@@ -702,7 +701,6 @@ window.submitPost = async function() {
   if (!text && !postImageData && !hasPoll) { toast('Write something first!'); return; }
   if (hasPoll && (!pollO1 || !pollO2)) { toast('Polls need at least 2 options.'); return; }
 
-  // Mute check
   if (currentProfile?.mutedUntil && currentProfile.mutedUntil.toDate() > new Date()) {
     toast(`You're muted until ${currentProfile.mutedUntil.toDate().toLocaleString()}`);
     return;
@@ -821,7 +819,6 @@ window.openProfileByUID = async function(uid) {
       <div style="padding:1rem;text-align:center;color:var(--muted)">Loading posts…</div>
     </div>`;
 
-  // Load user's posts
   try {
     const postsQ = query(collection(db, 'posts'), where('uid','==',uid), orderBy('createdAt','desc'), limit(10));
     const postsSnap = await getDocs(postsQ);
@@ -982,14 +979,12 @@ async function loadDMList() {
 }
 
 window.searchConvos = function(val) {
-  // Basic client filter
   document.querySelectorAll('#dm-list .dm-item').forEach(item => {
     item.style.display = item.querySelector('.dm-name')?.textContent.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
   });
 };
 
 window.openDMWith = async function(uid, name, avatar, username) {
-  // Find or create DM thread
   const participants = [currentUser.uid, uid].sort();
   const q = query(collection(db, 'dms'), where('participants','==',participants));
   const snap = await getDocs(q);
@@ -1049,8 +1044,6 @@ window.openChatWith = function(threadId, uid, name, avatar) {
   });
 
   document.getElementById('cw-inp').dataset.thread = threadId;
-
-  // Mark as read
   updateDoc(doc(db, 'dms', threadId), { unreadBy: arrayRemove(currentUser.uid) }).catch(_=>_);
 };
 
@@ -1134,7 +1127,6 @@ async function doSearch(val) {
 // ═══════════════════════════════════════════════════════════════
 
 async function loadWidgets() {
-  // Trending hashtags (static demo + real counts)
   const trendingEl = document.getElementById('w-trending');
   if (trendingEl) {
     const topics = ['#vibecheck','#trending','#photos','#music','#gaming','#art','#food','#travel'];
@@ -1145,7 +1137,6 @@ async function loadWidgets() {
       </div>`).join('');
   }
 
-  // Suggested users
   const suggestEl = document.getElementById('w-suggest');
   if (suggestEl) {
     try {
@@ -1172,7 +1163,6 @@ async function loadWidgets() {
     } catch (_) {}
   }
 
-  // Online users
   const onlineEl = document.getElementById('w-online');
   if (onlineEl) {
     try {
@@ -1211,7 +1201,6 @@ async function checkWarnings(uid) {
   const unacked = warnings.find(w => !w.acknowledged);
   if (unacked) {
     pendingWarn = { uid, warnings, warn: unacked, idx: warnings.indexOf(unacked) };
-    const warnedCount = warnings.filter(w => !w.acknowledged).length;
     document.getElementById('warn-reason').textContent = unacked.reason || 'Violation of community guidelines.';
     document.getElementById('warn-count').textContent = `Warning ${warnings.length} — ${warnings.length >= 3 ? '⚠️ Final warning before ban' : `${3 - warnings.length} warning(s) remaining before ban`}`;
     document.getElementById('warn-modal').classList.remove('hidden');
@@ -1238,7 +1227,6 @@ window.openPanel = function(name) {
   if (panel) panel.classList.add('open');
   const backdrop = document.getElementById('backdrop');
   if (backdrop) backdrop.classList.remove('hidden');
-  if (name === 'notifications') renderNotifs; // already subscribed
 };
 
 window.closePanel = function(name) {
@@ -1317,7 +1305,6 @@ async function loadAdminOverview() {
     document.getElementById('as-reports').textContent = rSnap.size;
     document.getElementById('as-verified').textContent = verified;
 
-    // Recent posts
     const recentSnap = await getDocs(query(collection(db,'posts'), orderBy('createdAt','desc'), limit(5)));
     const el = document.getElementById('adm-recent');
     if (el) el.innerHTML = recentSnap.docs.map(d => {
@@ -1499,7 +1486,6 @@ window.admResolveReport = async function(reportId) {
   loadAdmReports();
 };
 
-// Badge manager
 window.admBadgeSearch = async function(val) {
   if (!val.trim()) { document.getElementById('adm-badge-results').innerHTML = ''; return; }
   const v = val.toLowerCase().replace(/^@/,'');
