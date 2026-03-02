@@ -1284,11 +1284,18 @@ window.exitAdmin = function() {
 };
 
 window.showAdmTab = function(tab, btn) {
-  document.querySelectorAll('.adm-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.adm-tab').forEach(t => {
+    t.classList.remove('active');
+    t.classList.add('hidden');
+  });
   document.querySelectorAll('.adm-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('adm-' + tab)?.classList.add('active');
+  const target = document.getElementById('adm-' + tab);
+  if (target) {
+    target.classList.remove('hidden');
+    target.classList.add('active');
+  }
   btn.classList.add('active');
-  const loaders = { users: loadAdmUsers, posts: loadAdmPosts, reports: loadAdmReports, badges: ()=>{}, overview: loadAdminOverview };
+  const loaders = { users: loadAdmUsers, posts: loadAdmPosts, reports: loadAdmReports, badges: ()=>{}, announce: ()=>{}, settings: ()=>{}, overview: loadAdminOverview };
   if (loaders[tab]) loaders[tab]();
 };
 
@@ -1322,8 +1329,12 @@ async function loadAdmUsers() {
   const el = document.getElementById('adm-user-list');
   if (!el) return;
   el.innerHTML = '<div style="color:var(--muted)">Loading…</div>';
-  const snap = await getDocs(query(collection(db,'users'), orderBy('createdAt','desc'), limit(50)));
-  renderAdmUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  try {
+    const snap = await getDocs(query(collection(db,'users'), limit(50)));
+    renderAdmUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--red);padding:1rem">Error: ' + e.message + '</div>';
+  }
 }
 
 function renderAdmUsers(users) {
@@ -1438,7 +1449,9 @@ async function loadAdmPosts() {
   const el = document.getElementById('adm-post-list');
   if (!el) return;
   el.innerHTML = '<div style="color:var(--muted)">Loading…</div>';
+  try {
   const snap = await getDocs(query(collection(db,'posts'), orderBy('createdAt','desc'), limit(50)));
+  if (snap.empty) { el.innerHTML = '<div style="color:var(--muted);padding:1rem">No posts yet.</div>'; return; }
   el.innerHTML = snap.docs.map(d => {
     const p = d.data();
     return `<div class="adm-user-row">
@@ -1450,6 +1463,9 @@ async function loadAdmPosts() {
       <button class="adm-action-btn danger" onclick="admDeletePost('${d.id}')">Delete</button>
     </div>`;
   }).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--red);padding:1rem">Error: ' + e.message + '</div>';
+  }
 }
 
 window.admDeletePost = async function(postId) {
@@ -1463,6 +1479,7 @@ async function loadAdmReports() {
   const el = document.getElementById('adm-report-list');
   if (!el) return;
   el.innerHTML = '<div style="color:var(--muted)">Loading…</div>';
+  try {
   const snap = await getDocs(query(collection(db,'reports'), where('status','==','open'), orderBy('createdAt','desc'), limit(50)));
   if (snap.empty) { el.innerHTML = '<div style="color:var(--green);padding:1rem">✅ No open reports!</div>'; return; }
   el.innerHTML = snap.docs.map(d => {
@@ -1478,6 +1495,9 @@ async function loadAdmReports() {
       </div>
     </div>`;
   }).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--red);padding:1rem">Error: ' + e.message + '</div>';
+  }
 }
 
 window.admResolveReport = async function(reportId) {
